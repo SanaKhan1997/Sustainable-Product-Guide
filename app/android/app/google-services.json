@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "264041939202",
+    "project_id": "sustainable-product-guide",
+    "storage_bucket": "sustainable-product-guide.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:264041939202:android:c22fbe1fb25f168f2a821b",
+        "android_client_info": {
+          "package_name": "com.SustainableProductGuide"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "264041939202-ud7dnigpigab5rgir9lfqt4rr6rn4s8n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnntT0XS8LaRC_LaZGUIImB6LVTAz-a6M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "264041939202-ud7dnigpigab5rgir9lfqt4rr6rn4s8n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
