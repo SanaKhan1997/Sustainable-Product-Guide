@@ -1,5 +1,6 @@
 import 'package:app/displays/home_screen.dart';
 import 'package:app/displays/info_screen.dart';
+import 'package:app/displays/product_display.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,11 +13,14 @@ class Routes {
   static const String SignupRoute = '/signUp';
   static const String LoginRoute = '/logIn';
   static const String HomeRoute = '/home';
+  static const String ProductRoute = '/product';
   static const String InfoRoute = '/info';
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case HomeRoute:
         return MaterialPageRoute(builder: (_) => HomeScreen());
+      case ProductRoute:
+        return MaterialPageRoute(builder: (_) => ProductScreen());
       case InfoRoute:
         return MaterialPageRoute(builder: (_) => InfoScreen());
       case StartupRoute:

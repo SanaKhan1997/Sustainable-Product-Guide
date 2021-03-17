@@ -1,4 +1,5 @@
 import 'package:app/data_models/user.dart';
+import 'package:app/routes.dart';
 import 'package:app/services/database/database_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -177,16 +178,21 @@ class _SignUpState extends State<SignUpScreen> {
   }
 
   //TODO add database service
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   void signupUser() async {
     final databaseService = DatabaseProvider();
     await _auth
         .createUserWithEmailAndPassword(
-            email: _emailController.text, password: _pwdController.text)
-        .then((authUser) => databaseService.setNewUser(Users(
-            userId: authUser.user.uid,
-            firstName: _lastNameController.value.text,
-            lastName: _lastNameController.value.text,
-            email: _emailController.value.text)));
+            email: _emailController.text.trim(),
+            password: _pwdController.text.trim())
+        .then((authUser) {
+      databaseService
+          .setNewUser(Users(
+              userId: authUser.user.uid,
+              firstName: _firstNameController.value.text,
+              lastName: _lastNameController.value.text,
+              email: _emailController.value.text.trim()))
+          .then((_) => Navigator.of(context).pushNamed(Routes.LoginRoute));
+    });
   }
 }

@@ -54,7 +54,7 @@ class StartupScreen extends StatelessWidget {
                       Navigator.pushNamed(context, Routes.SignupRoute);
                     })),
             const SizedBox(height: 15),
-            SizedBox(
+            /*SizedBox(
                 height: 45,
                 width: 150,
                 child: RaisedButton(
@@ -68,9 +68,9 @@ class StartupScreen extends StatelessWidget {
                     ),
                     onPressed: () {
                       Navigator.pushNamed(context, Routes.HomeRoute);
-                    })),
+                    })),*/
             const SizedBox(height: 15),
-            SizedBox(
+            /*SizedBox(
                 height: 45,
                 width: 150,
                 child: RaisedButton(
@@ -84,7 +84,7 @@ class StartupScreen extends StatelessWidget {
                     ),
                     onPressed: () {
                       Navigator.pushNamed(context, Routes.InfoRoute);
-                    })),
+                    })),*/
           ],
         ),
       ),
