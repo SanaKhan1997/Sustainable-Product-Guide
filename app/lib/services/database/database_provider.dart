@@ -10,6 +10,9 @@ class DatabaseProvider {
   Future<void> setNewUser(Users user) async =>
       _firestore.collection('users').doc(user.userId).set(user.toJSON());
 
+  Future<void> setNewProduct(Product product) async =>
+      _firestore.collection('products').add(product.toJSON());
+
   Future<Users> getUser(String userId) async => _firestore
       .collection('users')
       .doc(userId)

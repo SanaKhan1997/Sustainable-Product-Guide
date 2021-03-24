@@ -54,37 +54,6 @@ class StartupScreen extends StatelessWidget {
                       Navigator.pushNamed(context, Routes.SignupRoute);
                     })),
             const SizedBox(height: 15),
-            /*SizedBox(
-                height: 45,
-                width: 150,
-                child: RaisedButton(
-                    color: HexColor("#F5F5F5").withOpacity(0.4),
-                    child: Text(
-                      'Home',
-                      style: TextStyle(fontSize: 20, color: Colors.white),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(22.0),
-                    ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, Routes.HomeRoute);
-                    })),*/
-            const SizedBox(height: 15),
-            /*SizedBox(
-                height: 45,
-                width: 150,
-                child: RaisedButton(
-                    color: HexColor("#F5F5F5").withOpacity(0.4),
-                    child: Text(
-                      'Info',
-                      style: TextStyle(fontSize: 20, color: Colors.white),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(22.0),
-                    ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, Routes.InfoRoute);
-                    })),*/
           ],
         ),
       ),

@@ -1,6 +1,5 @@
 import 'package:app/data_models/product.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -29,20 +28,43 @@ class ProductScreen extends StatelessWidget {
                   child: CachedNetworkImage(
                     fit: BoxFit.cover,
                     placeholder: (context, url) =>
-                        new CircularProgressIndicator(),
+                        new CircularProgressIndicator(
+                      value: 15,
+                    ),
                     imageUrl: product.productImages,
                   ),
                 ),
                 Container(
                   width: size.width,
                   height: size.height * 0.1,
-                  decoration: BoxDecoration(color: HexColor("#3c2221")),
+                  decoration: BoxDecoration(color: HexColor("#3c5949")),
                   child: Text(
                     product.productName,
                     style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
                         color: Colors.white),
+                  ),
+                ),
+                Container(
+                  width: size.width,
+                  decoration: BoxDecoration(color: Colors.white),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            product.productCompany,
+                            style: TextStyle(fontSize: 22),
+                          ),
+                          Text(
+                            "${product.productPrice}",
+                            style: TextStyle(fontSize: 22),
+                          )
+                        ],
+                      ),
+                    ],
                   ),
                 ),
                 Container(

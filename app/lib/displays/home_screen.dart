@@ -29,7 +29,7 @@ class _HomeScreen extends State<HomeScreen> {
         stream: FirebaseFirestore.instance.collection('products').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return new Text('Error in retreiving data: ${snapshot.error}');
+            return new Text('Error in retrieving data: ${snapshot.error}');
           }
 
           switch (snapshot.connectionState) {
@@ -62,7 +62,6 @@ class _HomeScreen extends State<HomeScreen> {
                         return Center(
                           child: Card(
                             child: InkWell(
-                              splashColor: Colors.black,
                               onTap: () {
                                 Navigator.push(
                                     context,
@@ -83,7 +82,10 @@ class _HomeScreen extends State<HomeScreen> {
                                           maxHeightDiskCache: 208,
                                           filterQuality: FilterQuality.low,
                                           placeholder: (context, url) =>
-                                              new CircularProgressIndicator(),
+                                              new LinearProgressIndicator(
+                                            backgroundColor: Colors.black,
+                                            minHeight: 8,
+                                          ),
                                           imageUrl: productSnapshot[index]
                                               .get('productImages'),
                                         ),
@@ -114,18 +116,46 @@ class _HomeScreen extends State<HomeScreen> {
           );
         });
     return Scaffold(
-      backgroundColor: Colors.grey,
-      appBar: AppBar(
-        title: Text('Home'),
-        backgroundColor: HexColor("#3c5949"),
-      ),
-      body: new Container(
-        child: new Column(
-          children: <Widget>[
-            products,
-          ],
+        backgroundColor: Colors.grey,
+        appBar: AppBar(
+          title: Text(
+            'Home',
+            style: TextStyle(fontSize: 22),
+          ),
+          backgroundColor: HexColor("#3c5949"),
+          automaticallyImplyLeading: false,
         ),
-      ),
-    );
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: 0,
+          items: [
+            BottomNavigationBarItem(
+              icon: new Icon(Icons.house_outlined),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+                icon: new Icon(Icons.add_box), label: 'Add Product'),
+            BottomNavigationBarItem(
+                icon: new Icon(Icons.account_box_rounded), label: 'Profile'),
+          ],
+          onTap: (int item) async {
+            switch (item) {
+              case 0:
+                return Navigator.of(context).pushNamed(Routes.HomeRoute);
+              case 1:
+                return Navigator.of(context).pushNamed(Routes.ProductPostRoute);
+              case 2:
+                return Navigator.of(context).pushNamed(Routes.ProfileRoute);
+            }
+          },
+        ),
+        body: new Container(
+          child: SingleChildScrollView(
+            child: new Column(
+              children: <Widget>[
+                products,
+              ],
+            ),
+          ),
+        ));
   }
 }
