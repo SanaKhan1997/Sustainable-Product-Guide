@@ -6,6 +6,7 @@ class Product {
   final String productCompany;
   final String productDescription;
   final String productPrice;
+  final String productId;
   final String productImages;
 
   Product(
@@ -14,7 +15,8 @@ class Product {
       @required this.productCompany,
       @required this.productDescription,
       @required this.productPrice,
-      @required this.productImages});
+      @required this.productImages,
+      @required this.productId});
 
   Product.fromJSON(Map<String, dynamic> json, String _productId)
       : productType = json['productType'],
@@ -22,7 +24,8 @@ class Product {
         productCompany = json['productCompany'],
         productDescription = json['productDescription'],
         productPrice = json['productPrice'],
-        productImages = json['productImages'];
+        productImages = json['productImages'],
+        productId = _productId;
 
   Map<String, dynamic> toJSON() => {
         'productType': productType,

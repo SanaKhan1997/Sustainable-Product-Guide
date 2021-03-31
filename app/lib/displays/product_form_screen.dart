@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:app/data_models/product.dart';
-import 'package:app/data_models/user.dart';
 import 'package:app/services/database/database_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 
 import '../routes.dart';
 
@@ -21,6 +21,7 @@ class ProductFormScreen extends StatefulWidget {
 }
 
 class _ProductFormScreen extends State<ProductFormScreen> {
+  final databaseService = DatabaseProvider();
   final TextEditingController _productTitleController = TextEditingController();
   final TextEditingController _productCompanyController =
       TextEditingController();
@@ -28,6 +29,7 @@ class _ProductFormScreen extends State<ProductFormScreen> {
   final TextEditingController _productPriceController = TextEditingController();
   final TextEditingController _productDescriptionController =
       TextEditingController();
+  File imageFile;
 
   @override
   Widget build(BuildContext context) {
@@ -54,20 +56,43 @@ class _ProductFormScreen extends State<ProductFormScreen> {
                                     color: Colors.white),
                               ),
                               SizedBox(height: size.height * 0.04),
-                              RawMaterialButton(
-                                fillColor: Theme.of(context).buttonColor,
-                                child: Icon(Icons.photo),
-                                hoverColor: Colors.grey,
-                                padding: EdgeInsets.all(10),
-                                shape: CircleBorder(),
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pushNamed(Routes.ImageRoute);
-                                },
+                              Center(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _showPicker(context);
+                                  },
+                                  child: CircleAvatar(
+                                    radius: 55,
+                                    backgroundColor: Colors.white,
+                                    child: imageFile != null
+                                        ? ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            child: Image.file(
+                                              imageFile,
+                                              width: 100,
+                                              height: 100,
+                                              fit: BoxFit.fitWidth,
+                                            ),
+                                          )
+                                        : Container(
+                                            decoration: BoxDecoration(
+                                                color: Colors.grey[200],
+                                                borderRadius:
+                                                    BorderRadius.circular(50)),
+                                            width: 100,
+                                            height: 100,
+                                            child: Icon(
+                                              Icons.photo,
+                                              color: Colors.grey[800],
+                                            ),
+                                          ),
+                                  ),
+                                ),
                               ),
+                              SizedBox(height: size.height * 0.02),
                               TextField(
                                 controller: _productTitleController,
-                                obscureText: true,
                                 decoration: InputDecoration(
                                     filled: true,
                                     fillColor: Colors.white,
@@ -81,7 +106,6 @@ class _ProductFormScreen extends State<ProductFormScreen> {
                               SizedBox(height: size.height * 0.02),
                               TextField(
                                 controller: _productCompanyController,
-                                obscureText: true,
                                 decoration: InputDecoration(
                                     filled: true,
                                     fillColor: Colors.white,
@@ -95,7 +119,6 @@ class _ProductFormScreen extends State<ProductFormScreen> {
                               SizedBox(height: size.height * 0.02),
                               TextField(
                                 controller: _productTypeController,
-                                obscureText: true,
                                 decoration: InputDecoration(
                                     filled: true,
                                     fillColor: Colors.white,
@@ -109,7 +132,6 @@ class _ProductFormScreen extends State<ProductFormScreen> {
                               SizedBox(height: size.height * 0.02),
                               TextField(
                                 controller: _productPriceController,
-                                obscureText: true,
                                 decoration: InputDecoration(
                                     filled: true,
                                     fillColor: Colors.white,
@@ -123,7 +145,6 @@ class _ProductFormScreen extends State<ProductFormScreen> {
                               SizedBox(height: size.height * 0.02),
                               TextField(
                                 controller: _productDescriptionController,
-                                obscureText: true,
                                 decoration: InputDecoration(
                                     filled: true,
                                     fillColor: Colors.white,
@@ -160,15 +181,16 @@ class _ProductFormScreen extends State<ProductFormScreen> {
                                                 _productPriceController
                                                     .text.isNotEmpty &&
                                                 _productTypeController
-                                                    .text.isNotEmpty
-                                            ? postProduct()
+                                                    .text.isNotEmpty &&
+                                                imageFile != null
+                                            ? postProduct(context)
                                             : showDialog(
                                                 context: context,
                                                 builder: (_) {
                                                   return AlertDialog(
                                                     title: Text("Error"),
-                                                    content:
-                                                        Text("Cannot Login"),
+                                                    content: Text(
+                                                        "Make sure you have filled out information correctly"),
                                                   );
                                                 });
                                       })),
@@ -198,17 +220,69 @@ class _ProductFormScreen extends State<ProductFormScreen> {
     );
   }
 
-  postProduct() async {
-    final databaseService = DatabaseProvider();
+  Future<String> getImagePath(File image) async =>
+      databaseService.uploadProductImage(imageFile, basename(imageFile.path));
+
+  postProduct(BuildContext context) async {
+    String get = await getImagePath(imageFile);
     await databaseService
         .setNewProduct(Product(
             productCompany: _productCompanyController.text,
             productDescription: _productDescriptionController.text,
             productName: _productTitleController.text,
             productPrice: _productPriceController.text,
-            productImages:
-                'https://firebasestorage.googleapis.com/v0/b/sustainable-product-guide.appspot.com/o/ALOE_SOOTHING_DAY_CREAM_50ML_1_INRSDPS189.jpg?alt=media&token=00af3307-47ba-4f3c-9f0d-d43a77560279',
+            productImages: get,
             productType: _productTypeController.text))
         .then((_) => Navigator.of(context).pushNamed(Routes.HomeRoute));
+  }
+
+  _imgFromCamera() async {
+    PickedFile image = await ImagePicker()
+        .getImage(source: ImageSource.camera, imageQuality: 50);
+    File _imageFile = File(image.path);
+
+    setState(() {
+      imageFile = _imageFile;
+    });
+  }
+
+  _imgFromGallery() async {
+    PickedFile image = await ImagePicker()
+        .getImage(source: ImageSource.gallery, imageQuality: 50);
+    File _imageFile = File(image.path);
+
+    setState(() {
+      imageFile = _imageFile;
+    });
+  }
+
+  void _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              child: new Wrap(
+                children: <Widget>[
+                  new ListTile(
+                      leading: new Icon(Icons.photo_library),
+                      title: new Text('Photo Gallery'),
+                      onTap: () {
+                        _imgFromGallery();
+                        Navigator.of(context).pop();
+                      }),
+                  new ListTile(
+                    leading: new Icon(Icons.photo_camera),
+                    title: new Text('Camera'),
+                    onTap: () {
+                      _imgFromCamera();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }

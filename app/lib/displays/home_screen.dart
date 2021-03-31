@@ -25,6 +25,7 @@ class _HomeScreen extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     Widget products = new StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('products').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -72,26 +73,34 @@ class _HomeScreen extends State<HomeScreen> {
                                                 productSnapshot[index].id))));
                               },
                               child: Container(
+                                  height: size.height * 0.9,
                                   child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: <Widget>[
-                                    ClipRect(
-                                      child: Align(
-                                        alignment: Alignment.topCenter,
-                                        child: new CachedNetworkImage(
-                                          maxHeightDiskCache: 208,
-                                          filterQuality: FilterQuality.low,
-                                          placeholder: (context, url) =>
-                                              new LinearProgressIndicator(
-                                            backgroundColor: Colors.black,
-                                            minHeight: 8,
+                                        Container(
+                                          alignment: Alignment.topCenter,
+                                          constraints: BoxConstraints(
+                                              maxHeight: size.height * 0.20,
+                                              minWidth: size.width * 0.6),
+                                          child: ClipRect(
+                                            child: new CachedNetworkImage(
+                                              fit: BoxFit.fitWidth,
+                                              placeholder: (context, url) =>
+                                                  new LinearProgressIndicator(
+                                                backgroundColor: Colors.black,
+                                                minHeight: 8,
+                                              ),
+                                              imageUrl: productSnapshot[index]
+                                                  .get('productImages'),
+                                            ),
                                           ),
-                                          imageUrl: productSnapshot[index]
-                                              .get('productImages'),
                                         ),
-                                      ),
-                                    ),
-                                  ])),
+                                        Text(
+                                          productSnapshot[index]
+                                              .get('productName'),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ])),
                             ),
                           ),
                         );
@@ -126,25 +135,26 @@ class _HomeScreen extends State<HomeScreen> {
           automaticallyImplyLeading: false,
         ),
         bottomNavigationBar: BottomNavigationBar(
-          currentIndex: 0,
+          selectedItemColor: HexColor("#3c5949"),
+          unselectedItemColor: HexColor("#3c5949"),
           items: [
             BottomNavigationBarItem(
-              icon: new Icon(Icons.house_outlined),
-              label: 'Home',
+              icon: new Icon(Icons.account_box_rounded),
+              label: 'Profile',
             ),
             BottomNavigationBarItem(
                 icon: new Icon(Icons.add_box), label: 'Add Product'),
             BottomNavigationBarItem(
-                icon: new Icon(Icons.account_box_rounded), label: 'Profile'),
+                icon: new Icon(Icons.eco_sharp), label: 'Labels'),
           ],
           onTap: (int item) async {
             switch (item) {
               case 0:
-                return Navigator.of(context).pushNamed(Routes.HomeRoute);
+                return Navigator.of(context).pushNamed(Routes.ProfileRoute);
               case 1:
                 return Navigator.of(context).pushNamed(Routes.ProductPostRoute);
               case 2:
-                return Navigator.of(context).pushNamed(Routes.ProfileRoute);
+                return Navigator.of(context).pushNamed(Routes.InfoRoute);
             }
           },
         ),
