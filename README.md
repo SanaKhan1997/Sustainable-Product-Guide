@@ -1,5 +1,6 @@
 # Sustainable-Product-Guide
-A mobile application to raise eco-friendly products awareness and guide consumers to make more eco-friendly choices. 
+As studies and scientific research on sustainable environment is growing, more organizations are putting their effort to play their role in UN sustainable development goals. This also resulted in production of green/ethically safe products by many companies, but the lack of awareness among consumers has minimized these efforts. Therefore, a community platform is required to provide knowledge regarding sustainable development, promote organizations that are contributing towards sustainable production and consumption goals and compare the impacts of these products  with others.
+Goal of this project is to design and develop a mobile application to raise eco-friendly products awareness and guide consumers to make more eco-friendly choices. 
 
 ## Installation Guide
 1. Install an IDE of your choice(Andriod Studio, VS code, Intell IJ, etc)
@@ -20,7 +21,6 @@ A mobile application to raise eco-friendly products awareness and guide consumer
 
 ## Final Deliverables
 1. [Project Commercial](https://youtu.be/PqprsKNLXFA)
-
 2. [Final Report-out and Lessons Learned](https://github.com/SanaKhan1997/Sustainable-Product-Guide/blob/main/Documentation/Report.pdf)
 
 ## Project Vlog
