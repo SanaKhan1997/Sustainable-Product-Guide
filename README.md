@@ -17,7 +17,7 @@ A mobile application to raise eco-friendly products awareness and guide consumer
 ## Final Deliverables
 1. Project Commercial
 
-2. Final Report-out and Lessons Learned
+2. [Final Report-out and Lessons Learned](https://github.com/SanaKhan1997/Sustainable-Product-Guide/blob/main/Documentation/Report.pdf)
 
 ## Project Vlog
 1. [Project Vlog - March 17, 2021](https://youtu.be/0x4Rz2ObhJA)
