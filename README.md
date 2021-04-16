@@ -14,6 +14,10 @@ A mobile application to raise eco-friendly products awareness and guide consumer
 
 6. Open the project in IDE
 
+## Architecture and Design
+1. [System Architecture Designs](https://github.com/SanaKhan1997/Sustainable-Product-Guide/tree/main/Documentation/System%20Architecture%20Drawings)
+2. [Hi-fidelity Prototypes](https://xd.adobe.com/view/7b2e6983-18ee-473c-bcca-0df9b49a9d20-2e7d/)
+
 ## Final Deliverables
 1. [Project Commercial](https://youtu.be/PqprsKNLXFA)
 
