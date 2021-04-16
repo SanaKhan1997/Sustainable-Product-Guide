@@ -13,7 +13,7 @@ class ProductScreen extends StatelessWidget {
   final Product product;
   final TextEditingController _commentController = TextEditingController();
   final databaseService = DatabaseProvider();
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   ProductScreen({this.product});
   @override
@@ -52,7 +52,8 @@ class ProductScreen extends StatelessWidget {
                     child: ExpansionTile(
                         leading: Icon(Icons.comment, color: Colors.black),
                         trailing: Text(commentCount.toString()),
-                        title: Text("Comments"),
+                        title: Text("Reviews",
+                            style: TextStyle(color: Colors.black)),
                         children: [
                           ListView.builder(
                               scrollDirection: Axis.vertical,
@@ -62,7 +63,7 @@ class ProductScreen extends StatelessWidget {
                               itemBuilder: (BuildContext context, int index) {
                                 return Center(
                                   child: Card(
-                                    color: HexColor('#698C72'),
+                                    color: HexColor('99CC99'),
                                     child: Container(
                                       height: size.height * 0.09,
                                       child: Column(
@@ -122,6 +123,7 @@ class ProductScreen extends StatelessWidget {
               return new Text('Streaming is done');
           }
           return Container(
+            constraints: BoxConstraints(maxHeight: 5),
             child: new Text('No comments found'),
           );
         });
@@ -133,9 +135,10 @@ class ProductScreen extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           child: Container(
-              color: Colors.white,
+              color: HexColor("#E4DBDB"),
               child: Center(
                 child: Column(
+                  mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     Container(
                       width: size.width,
@@ -162,6 +165,30 @@ class ProductScreen extends StatelessWidget {
                             color: Colors.white),
                       ),
                     ),
+                    Container(
+                        width: size.width,
+                        color: HexColor('#E4DBDB'),
+                        child: SizedBox(
+                            height: 40,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount: product.productLabels.length,
+                              itemBuilder: (context, int index) {
+                                return Container(
+                                    alignment: Alignment.center,
+                                    padding: EdgeInsets.all(5),
+                                    child: Card(
+                                      color: HexColor('99CC99'),
+                                      child: Text(
+                                        product.productLabels[index],
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ));
+                              },
+                            ))),
                     Container(
                       width: size.width,
                       decoration: BoxDecoration(color: Colors.white),
@@ -202,6 +229,19 @@ class ProductScreen extends StatelessWidget {
                       ),
                     ),
                     Container(
+                      alignment: Alignment.centerLeft,
+                      width: size.width,
+                      height: size.height * 0.08,
+                      decoration: BoxDecoration(color: HexColor("#3c5949")),
+                      child: Text(
+                        "Reviews",
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                    ),
+                    Container(
                       padding: EdgeInsets.all(5),
                       child: TextField(
                         controller: _commentController,
@@ -211,7 +251,7 @@ class ProductScreen extends StatelessWidget {
                             labelStyle: TextStyle(fontStyle: FontStyle.italic),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20)),
-                            labelText: 'Type your comment here...'),
+                            labelText: 'Write your review here...'),
                       ),
                     ),
                     SizedBox(

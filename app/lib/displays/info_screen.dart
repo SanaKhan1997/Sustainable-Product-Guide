@@ -39,8 +39,12 @@ class InfoScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 8.0),
                     child: ExpansionTile(
                         leading: Icon(Icons.label, color: Colors.black),
-                        trailing: Text(labelCount.toString()),
-                        title: Text("Eco-friendly Labels"),
+                        trailing: Text(
+                          labelCount.toString(),
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        title: Text("Eco-friendly Labels",
+                            style: TextStyle(color: Colors.black)),
                         initiallyExpanded: true,
                         children: [
                           ListView.builder(
@@ -51,7 +55,7 @@ class InfoScreen extends StatelessWidget {
                               itemBuilder: (BuildContext context, int index) {
                                 return Center(
                                   child: Card(
-                                    color: HexColor('#698C72'),
+                                    color: HexColor('#E4DBDB'),
                                     child: Container(
                                       child: Column(
                                         children: [
@@ -74,8 +78,14 @@ class InfoScreen extends StatelessWidget {
                                                       .get('labelImage'),
                                                 ),
                                               ),
-                                              Text(labelSnapshot[index]
-                                                  .get('labelName'))
+                                              Text(
+                                                labelSnapshot[index]
+                                                    .get('labelName'),
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )
                                             ],
                                           ),
                                           Container(
@@ -110,7 +120,7 @@ class InfoScreen extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 20),
                     ),
                     new Text(
-                      'No comments found',
+                      'No labels found',
                       style: TextStyle(fontSize: 18),
                     ),
                   ],

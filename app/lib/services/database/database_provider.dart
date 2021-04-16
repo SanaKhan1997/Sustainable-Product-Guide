@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app/data_models/Label.dart';
 import 'package:app/data_models/product.dart';
 import 'package:app/data_models/reviews.dart';
 import 'package:app/data_models/user.dart';
@@ -32,6 +33,11 @@ class DatabaseProvider {
   Stream<List<Product>> getProducts() =>
       _firestore.collection('products').snapshots().map((snapshot) =>
           snapshot.docs.map((doc) => Product.fromJSON(doc.data(), doc.id)));
+
+  Future<List<Label>> getLabels() => _firestore.collection('labels').get().then(
+      (QuerySnapshot querySnapshot) => querySnapshot.docs
+          .map((doc) => Label.fromJSON(doc.data(), doc.id))
+          .toList());
 
   Future<void> addReview(Review review) async =>
       _firestore.collection('reviews').add(review.toJSON());

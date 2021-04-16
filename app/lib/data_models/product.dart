@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
+import 'Label.dart';
+
 class Product {
   final String productType;
   final String productName;
@@ -8,6 +10,7 @@ class Product {
   final String productPrice;
   final String productId;
   final String productImages;
+  final List<dynamic> productLabels;
 
   Product(
       {@required this.productType,
@@ -16,6 +19,7 @@ class Product {
       @required this.productDescription,
       @required this.productPrice,
       @required this.productImages,
+      @required this.productLabels,
       @required this.productId});
 
   Product.fromJSON(Map<String, dynamic> json, String _productId)
@@ -25,6 +29,7 @@ class Product {
         productDescription = json['productDescription'],
         productPrice = json['productPrice'],
         productImages = json['productImages'],
+        productLabels = json['productLabels'],
         productId = _productId;
 
   Map<String, dynamic> toJSON() => {
@@ -33,6 +38,7 @@ class Product {
         'productCompany': productCompany,
         'productDescription': productDescription,
         'productPrice': productPrice,
-        'productImages': productImages
+        'productImages': productImages,
+        'productLabels': productLabels,
       };
 }

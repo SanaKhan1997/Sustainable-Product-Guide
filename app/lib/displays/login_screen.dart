@@ -45,7 +45,6 @@ class _LoginState extends State<LoginScreen> {
                               SizedBox(height: size.height * 0.04),
                               TextField(
                                 controller: _emailController,
-                                obscureText: true,
                                 decoration: InputDecoration(
                                     filled: true,
                                     fillColor: Colors.white,

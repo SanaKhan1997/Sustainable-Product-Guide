@@ -15,19 +15,42 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreen extends State<HomeScreen> {
+  List _allProducts = [];
   int _counter = 0;
-
+  TextEditingController _searchController = TextEditingController();
   void _incrementCounter() {
     setState(() {
       _counter++;
     });
   }
 
+  void initState() {
+    super.initState();
+    _searchController.addListener(_onSearchChange);
+  }
+
+  void dispose() {
+    _searchController.removeListener(_onSearchChange);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  getProducts() async {
+    return FirebaseFirestore.instance.collection('products').snapshots();
+  }
+
+  _onSearchChange() {}
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     Widget products = new StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('products').snapshots(),
+        stream: _searchController.text.isEmpty
+            ? FirebaseFirestore.instance.collection('products').snapshots()
+            : FirebaseFirestore.instance
+                .collection('products')
+                .where("productName", isEqualTo: _searchController.text)
+                .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             return new Text('Error in retrieving data: ${snapshot.error}');
@@ -79,12 +102,11 @@ class _HomeScreen extends State<HomeScreen> {
                                       children: <Widget>[
                                         Container(
                                           alignment: Alignment.topCenter,
-                                          constraints: BoxConstraints(
-                                              maxHeight: size.height * 0.20,
-                                              minWidth: size.width * 0.6),
                                           child: ClipRect(
                                             child: new CachedNetworkImage(
-                                              fit: BoxFit.fitWidth,
+                                              height: 165,
+                                              width: 200,
+                                              fit: BoxFit.fill,
                                               placeholder: (context, url) =>
                                                   new LinearProgressIndicator(
                                                 backgroundColor: Colors.black,
@@ -96,10 +118,9 @@ class _HomeScreen extends State<HomeScreen> {
                                           ),
                                         ),
                                         Text(
-                                          productSnapshot[index]
-                                              .get('productName'),
-                                          textAlign: TextAlign.center,
-                                        ),
+                                          '\$${productSnapshot[index].get('productPrice')}',
+                                          style: TextStyle(fontSize: 18),
+                                        )
                                       ])),
                             ),
                           ),
@@ -125,47 +146,56 @@ class _HomeScreen extends State<HomeScreen> {
           );
         });
     return Scaffold(
-        backgroundColor: Colors.grey,
-        appBar: AppBar(
-          title: Text(
-            'Home',
-            style: TextStyle(fontSize: 22),
-          ),
-          backgroundColor: HexColor("#3c5949"),
-          automaticallyImplyLeading: false,
+      backgroundColor: Colors.grey,
+      appBar: AppBar(
+        title: Text(
+          'Home',
+          style: TextStyle(fontSize: 22),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          selectedItemColor: HexColor("#3c5949"),
-          unselectedItemColor: HexColor("#3c5949"),
-          items: [
-            BottomNavigationBarItem(
-              icon: new Icon(Icons.account_box_rounded),
-              label: 'Profile',
-            ),
-            BottomNavigationBarItem(
-                icon: new Icon(Icons.add_box), label: 'Add Product'),
-            BottomNavigationBarItem(
-                icon: new Icon(Icons.eco_sharp), label: 'Labels'),
-          ],
-          onTap: (int item) async {
-            switch (item) {
-              case 0:
-                return Navigator.of(context).pushNamed(Routes.ProfileRoute);
-              case 1:
-                return Navigator.of(context).pushNamed(Routes.ProductPostRoute);
-              case 2:
-                return Navigator.of(context).pushNamed(Routes.InfoRoute);
-            }
-          },
-        ),
-        body: new Container(
-          child: SingleChildScrollView(
-            child: new Column(
-              children: <Widget>[
-                products,
-              ],
+        backgroundColor: HexColor("#3c5949"),
+        automaticallyImplyLeading: false,
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: HexColor("#3c5949"),
+        unselectedItemColor: HexColor("#3c5949"),
+        items: [
+          BottomNavigationBarItem(
+            icon: new Icon(Icons.account_box_rounded),
+            label: 'Profile',
+          ),
+          BottomNavigationBarItem(
+              icon: new Icon(Icons.add_box), label: 'Add Product'),
+          BottomNavigationBarItem(
+              icon: new Icon(Icons.eco_sharp), label: 'Labels'),
+        ],
+        onTap: (int item) async {
+          switch (item) {
+            case 0:
+              return Navigator.of(context).pushNamed(Routes.ProfileRoute);
+            case 1:
+              return Navigator.of(context).pushNamed(Routes.ProductPostRoute);
+            case 2:
+              return Navigator.of(context).pushNamed(Routes.InfoRoute);
+          }
+        },
+      ),
+      body: new Column(
+        children: <Widget>[
+          Container(
+            color: Colors.white,
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                prefixIcon: Icon(
+                  Icons.search_outlined,
+                  size: 30,
+                ),
+              ),
             ),
           ),
-        ));
+          Expanded(child: products),
+        ],
+      ),
+    );
   }
 }

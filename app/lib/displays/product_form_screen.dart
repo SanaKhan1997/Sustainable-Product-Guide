@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app/data_models/Label.dart';
 import 'package:app/data_models/product.dart';
 import 'package:app/services/database/database_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 import '../routes.dart';
 
@@ -30,6 +32,13 @@ class _ProductFormScreen extends State<ProductFormScreen> {
   final TextEditingController _productDescriptionController =
       TextEditingController();
   File imageFile;
+  List<String> label = [];
+  List<dynamic> selectedLabel = [];
+
+  void initState() {
+    super.initState();
+    getLabels();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +164,41 @@ class _ProductFormScreen extends State<ProductFormScreen> {
                                             BorderRadius.circular(28)),
                                     labelText: 'Product Description'),
                               ),
-                              SizedBox(height: size.height * 0.04),
+                              SizedBox(height: size.height * 0.02),
+                              MultiSelectDialogField(
+                                  title: Text("Eco Labels"),
+                                  selectedColor: Colors.green,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(40)),
+                                    border: Border.all(
+                                      color: Colors.green,
+                                      width: 2,
+                                    ),
+                                  ),
+                                  confirmText: Text(
+                                    "Confirm",
+                                    style: TextStyle(color: Colors.green),
+                                  ),
+                                  buttonIcon: Icon(
+                                    Icons.eco,
+                                    color: Colors.green,
+                                  ),
+                                  buttonText: Text(
+                                    "Select Eco Label",
+                                    style: TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  items: label
+                                      .map((e) => MultiSelectItem(e, e))
+                                      .toList(),
+                                  onConfirm: (results) {
+                                    selectedLabel = results;
+                                  }),
+                              SizedBox(height: size.height * 0.02),
                               SizedBox(
                                   height: 45,
                                   width: 180,
@@ -220,6 +263,13 @@ class _ProductFormScreen extends State<ProductFormScreen> {
     );
   }
 
+  getLabels() async {
+    var _label = await databaseService.getLabels();
+    setState(() {
+      label = List.from(_label.map((e) => e.labelName));
+    });
+  }
+
   Future<String> getImagePath(File image) async =>
       databaseService.uploadProductImage(imageFile, basename(imageFile.path));
 
@@ -232,6 +282,7 @@ class _ProductFormScreen extends State<ProductFormScreen> {
             productName: _productTitleController.text,
             productPrice: _productPriceController.text,
             productImages: get,
+            productLabels: List.from(selectedLabel),
             productType: _productTypeController.text))
         .then((_) => Navigator.of(context).pushNamed(Routes.HomeRoute));
   }
