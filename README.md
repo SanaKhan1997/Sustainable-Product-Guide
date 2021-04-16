@@ -15,7 +15,7 @@ A mobile application to raise eco-friendly products awareness and guide consumer
 6. Open the project in IDE
 
 ## Final Deliverables
-1. Project Commercial
+1. [Project Commercial](https://youtu.be/PqprsKNLXFA)
 
 2. [Final Report-out and Lessons Learned](https://github.com/SanaKhan1997/Sustainable-Product-Guide/blob/main/Documentation/Report.pdf)
 
